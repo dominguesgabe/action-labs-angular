@@ -1,0 +1,95 @@
+@use "variables" as *;
+
+.last-thirty {
+  font-size: 1rem;
+  color: $neutral-dark;
+  font-weight: 600;
+}
+
+.exchange-history-wrapper {
+  color: $neutral-dark;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &.closed {
+    border-bottom: 2px solid $brand-blue;
+  }
+}
+
+.button-show {
+  border: 0;
+  color: $brand-blue;
+  font-size: 1.5rem;
+  font-weight: 600;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.currency-cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #f4f4f4;
+  padding: 0.625rem;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid $brand-blue;
+}
+
+.currency-card {
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: #fff;
+  box-shadow: -4px 4px 13px 0px rgba(171, 171, 171, 0.43);
+  -webkit-box-shadow: -4px 4px 13px 0px rgba(171, 171, 171, 0.43);
+  -moz-box-shadow: -4px 4px 13px 0px rgba(171, 171, 171, 0.43);
+
+  .date {
+    font-weight: 700;
+    color: $brand-blue;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    color: $neutral-dark;
+    font-size: 0.75rem;
+    font-weight: 500;
+
+    span:nth-child(odd) {
+      text-align: left;
+    }
+
+    span:nth-child(even) {
+      text-align: right;
+    }
+
+    b {
+      margin-left: 0.9rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.close-diff {
+  font-size: 0.75rem;
+  font-weight: 500;
+  b {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e54e4e;
+  }
+}
