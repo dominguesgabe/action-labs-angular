@@ -1,9 +1,20 @@
-<style>
+<div class="wrapper">
+  <header>
+    <img src="/logo.svg" alt="Action Labs">
+  </header>
+  <main class="main">
+    <h1 class="title">BRL Exchange Rate</h1>
+    <form [formGroup]="form" class="exchange-form" (ngSubmit)="submit()">
 
-</style>
+      <app-input id="currency" label="Enter the currency code" [control]="form.controls.currency"></app-input>
 
-<main class="main">
-  <h1>Hello World</h1>
-</main>
+      <button type="submit" class="submit-button">EXCHANGE RESULT</button>
+    </form>
 
-<router-outlet />
+    <app-exchange-rate-shower></app-exchange-rate-shower>
+
+    <app-exchange-rate-history></app-exchange-rate-history>
+  </main>
+</div>
+
+<footer>Copyright 2022 - Action Labs</footer>
