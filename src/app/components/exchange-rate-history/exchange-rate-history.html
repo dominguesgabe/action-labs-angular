@@ -1,22 +1,35 @@
-<div class="exchange-history-wrapper" [ngClass]="{'closed': !modalOpen}">
-    <span class="last-thirty">
-        LAST 30 DAYS
-    </span>
-    <button (click)="toggleModal()" class="button-show">{{ modalOpen ? "-" : "+" }}</button>
-</div>
-<ul class="currency-cards-wrapper" *ngIf="modalOpen">
-    @for(currencyCard of currencyCards; track currencyCard) {
-    <li class="currency-card">
-        <span class="date">{{currencyCard.date | date:'dd/MM/yyyy'}}</span>
-        <div class="stats">
-            <span>OPEN: <b>{{currencyCard.open | currency: "BRL"}}</b></span>
-            <span>HIGH: <b>{{currencyCard.high | currency: "BRL"}}</b></span>
-            <span>CLOSE: <b>{{currencyCard.close | currency: "BRL"}}</b></span>
-            <span>LOW: <b>{{currencyCard.low | currency: "BRL"}}</b></span>
-        </div>
-        <div class="close-diff">
-            CLOSE DIFF (%): <b>{{currencyCard.closeDiff | currency: "BRL"}} ^</b>
-        </div>
-    </li>
-    }
-</ul>
+<ng-container *ngIf="currentExchangeRate$ | async as currentExchangeRate">
+    <div class="exchange-history-wrapper" [ngClass]="{'closed': !modalOpen}">
+        <span class="last-thirty">
+            LAST 30 DAYS
+        </span>
+        <button (click)="handleHistoryExchangeRate()" class="button-show">
+            {{ modalOpen ? "-" : "+" }}
+        </button>
+    </div>
+    <ng-container *ngIf="historyExchangeRate$ | async as historyExchangeRate">
+        <ul class="currency-cards-wrapper" *ngIf="modalOpen && historyExchangeRate.success">
+            @for(currencyCard of historyExchangeRate.data; track currencyCard; let i = $index) {
+            <li class="currency-card">
+                <span class="date">{{currencyCard.date | date:'dd/MM/yyyy'}}</span>
+                <div class="stats">
+                    <span>OPEN: <b>{{currencyCard.open | currency: "BRL":'symbol':'1.4-4'}}</b></span>
+                    <span>HIGH: <b>{{currencyCard.high | currency: "BRL":'symbol':'1.4-4'}}</b></span>
+                    <span>CLOSE: <b>{{currencyCard.close | currency: "BRL":'symbol':'1.4-4'}}</b></span>
+                    <span>LOW: <b>{{currencyCard.low | currency: "BRL":'symbol':'1.4-4'}}</b></span>
+                </div>
+                <ng-container *ngIf="getCloseDiff(i, historyExchangeRate.data) as diff">
+                    <div class="close-diff" *ngIf="diff !== null">
+                        CLOSE DIFF:
+                        <b [ngClass]="{ 'negative': diff < 0, 'positive': diff > 0 }">
+                            {{ diff | number: '1.2-2' }}%
+                            <span class="arrow">
+                                {{ diff < 0 ? 'v' : '^' }} </span>
+                        </b>
+                    </div>
+                </ng-container>
+            </li>
+            }
+        </ul>
+    </ng-container>
+</ng-container>

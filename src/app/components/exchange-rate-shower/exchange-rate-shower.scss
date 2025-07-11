@@ -8,6 +8,17 @@
   gap: 1rem;
 }
 
+.not-found {
+  height: 8.125rem;
+  background-color: #fadcdc;
+  color: $danger-red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
 .timestamp-unity-wrapper {
   display: flex;
   justify-content: space-between;
@@ -16,7 +27,6 @@
 .timestamp-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 0.25rem;
   color: $neutral-dark;
 }

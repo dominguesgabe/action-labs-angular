@@ -87,9 +87,20 @@
 .close-diff {
   font-size: 0.75rem;
   font-weight: 500;
+
   b {
     font-size: 1rem;
     font-weight: 600;
-    color: #e54e4e;
+    color: $brand-blue;
+    margin-left: 0.25rem;
+
+    &.negative {
+      color: $danger-red;
+    }
+
+    .arrow {
+      margin-left: 0.25rem;
+      font-weight: bold;
+    }
   }
 }

@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CurrencyService } from '../../services/currency/currency-service';
+import { CurrencyCard } from '../../services/currency/currency-model';
 
 @Component({
   selector: 'app-exchange-rate-history',
@@ -9,37 +11,41 @@ import { Component } from '@angular/core';
 })
 export class ExchangeRateHistory {
   modalOpen = false;
-  currencyCards = [
-    {
-      id: 1,
-      open: '5.0013',
-      close: '5.0023',
-      high: '5.0045',
-      low: '4.4323',
-      closeDiff: '1.15',
-      date: '2022-03-12',
-    },
-    {
-      id: 2,
-      open: '5.0013',
-      close: '5.0023',
-      high: '5.0045',
-      low: '4.4323',
-      closeDiff: '1.15',
-      date: '2022-03-11',
-    },
-    {
-      id: 3,
-      open: '5.0013',
-      close: '5.0023',
-      high: '5.0045',
-      low: '4.4323',
-      closeDiff: '1.15',
-      date: '2022-03-10',
-    },
-  ];
+  currencyService = inject(CurrencyService);
+  currentExchangeRate$ = this.currencyService.currencyInfo$;
+  historyExchangeRate$ = this.currencyService.currencyHistory$;
 
-  toggleModal() {
-    return (this.modalOpen = !this.modalOpen);
+  setModalOpen(boolean: boolean) {
+    return (this.modalOpen = boolean);
+  }
+
+  handleHistoryExchangeRate() {
+    const currentCurrency =
+      this.currencyService.getCurrentCurrencyValue()?.fromSymbol;
+
+    if (!currentCurrency) return;
+
+    this.currencyService.fetchHistoryExchangeCurrencyCards(currentCurrency);
+    this.setModalOpen(true);
+  }
+
+  ngOnInit() {
+    this.currentExchangeRate$.subscribe((currency) => {
+      if (currency) {
+        this.currencyService.clearCurrencyHistory();
+        this.setModalOpen(false);
+      }
+    });
+  }
+
+  getCloseDiff(index: number, data: CurrencyCard[]) {
+    if (index === 0) return 0;
+
+    const today = data[index];
+    const yesterday = data[index - 1];
+
+    if (!yesterday || yesterday.close === 0) return 0;
+
+    return ((today.close - yesterday.close) / yesterday.close) * 100;
   }
 }

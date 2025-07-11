@@ -1,18 +1,25 @@
-<div class="exchange-rate" *ngIf="true">
-    <div class="timestamp-unity-wrapper">
-        <div class="timestamp-wrapper">
-            <span class="rate-now-label">
-                Exchange rate now
-            </span>
-            <span>
-                09/03/2025 - 15h09
-            </span>
+<ng-container *ngIf="currentExchangeRate$ | async as currentExchangeRate">
+    <div class="exchange-rate" *ngIf="currentExchangeRate.success">
+        <div class="timestamp-unity-wrapper">
+            <div class="timestamp-wrapper">
+                <span class="rate-now-label">Exchange rate now</span>
+                <span>
+                    {{ currentExchangeRate.lastUpdatedAt | date: 'dd/MM/yyyy' }} -
+                    {{ currentExchangeRate.lastUpdatedAt | date: 'h' }}h{{ currentExchangeRate.lastUpdatedAt | date:
+                    'mm' }}
+                </span>
+            </div>
+            <div class="exchange-unity">
+                {{currentExchangeRate.fromSymbol | uppercase}}/BRL
+            </div>
         </div>
-        <div class="exchange-unity">
-            USD/BRL
+        <div class="exchange-value">
+            {{ currentExchangeRate.exchangeRate| currency: "BRL"}}
         </div>
     </div>
-    <div class="exchange-value">
-        {{ '5.34' | currency: "BRL"}}
+    <div class="exchange-rate" *ngIf="!currentExchangeRate.success">
+        <div class="not-found">
+            CURRENCY NOT FOUND
+        </div>
     </div>
-</div>
+</ng-container>

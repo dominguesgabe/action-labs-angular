@@ -4,9 +4,9 @@
   </header>
   <main class="main">
     <h1 class="title">BRL Exchange Rate</h1>
-    <form [formGroup]="form" class="exchange-form" (ngSubmit)="submit()">
-
-      <app-input id="currency" label="Enter the currency code" [control]="form.controls.currency"></app-input>
+    <form class="exchange-form" [formGroup]="currencyForm" (ngSubmit)="onSubmit()">
+      <app-input id="currency" label="Enter the currency code"
+        [control]="currencyForm.controls.currencyCode"></app-input>
 
       <button type="submit" class="submit-button">EXCHANGE RESULT</button>
     </form>
