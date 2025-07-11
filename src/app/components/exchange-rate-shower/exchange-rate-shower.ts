@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { CurrentExchangeRate } from '../../services/currency/currency-model';
 import { CurrencyService } from '../../services/currency/currency-service';
 
 @Component({

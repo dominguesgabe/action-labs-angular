@@ -33,6 +33,6 @@ export class App {
     const code = this.currencyForm.get('currencyCode')?.value;
     if (!code) return;
 
-    this.currencyService.fetchCurrentExchangeCurrencyCards(code.toUpperCase());
+    this.currencyService.fetchCurrentExchangeCurrencyCards(code);
   }
 }

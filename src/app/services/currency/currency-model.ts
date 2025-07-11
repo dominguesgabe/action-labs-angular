@@ -6,7 +6,7 @@ export interface CurrentExchangeRate {
   exchangeRate: number;
 }
 
-export interface DailyExchangeRate {
+export interface HistoryExchangeRate {
   success: boolean;
   from: string;
   to: string;

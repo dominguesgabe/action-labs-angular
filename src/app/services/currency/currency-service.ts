@@ -1,54 +1,68 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import {
-  CurrencyCard,
-  CurrentExchangeRate,
-  DailyExchangeRate,
-} from './currency-model';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { CurrentExchangeRate, HistoryExchangeRate } from './currency-model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CurrencyService {
-  // private http = inject(HttpClient);
   private env = environment;
-
   private currencyInfoSubject = new BehaviorSubject<CurrentExchangeRate | null>(
     null
   );
+  private currencyHistorySubject =
+    new BehaviorSubject<HistoryExchangeRate | null>(null);
+
   currencyInfo$ = this.currencyInfoSubject.asObservable();
+  currencyHistory$ = this.currencyHistorySubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
+  private getEndpoint(option: 'current' | 'history') {
+    const endpoint = {
+      current: 'currentExchangeRate',
+      history: 'dailyExchangeRate',
+    }[option];
+
+    return `${this.env.apiUrl}${endpoint}?apiKey=${this.env.apiKey}`;
+  }
+
+  clearCurrencyHistory() {
+    this.currencyHistorySubject.next(null);
+  }
+
   fetchCurrentExchangeCurrencyCards(from_symbol: string) {
     this.http
-      .get<CurrentExchangeRate>(
-        `${this.env.apiUrl}currentExchangeRate?apiKey=${this.env.apiKey}`,
-        {
-          params: {
-            from_symbol,
-            to_symbol: 'BRL',
-          },
-          observe: 'body',
-        }
-      )
+      .get<CurrentExchangeRate>(this.getEndpoint('current'), {
+        params: {
+          from_symbol,
+          to_symbol: 'BRL',
+        },
+        observe: 'body',
+      })
       .subscribe((info) => this.currencyInfoSubject.next(info));
   }
 
-  // getDailyExchangeCurrencyCards(params: GetParams): Observable<CurrencyCard[]> {
-  //   return this.http
-  //     .get<DailyExchangeRate>(
-  //       `${this.env.apiUrl}dailyExchangeRate?apiKey=${this.env.apiKey}`,
-  //       {
-  //         params: {
-  //           ...params,
-  //           to_symbol: 'BRL',
-  //         },
-  //         observe: 'body',
-  //       }
-  //     )
-  //     .pipe(map((res) => res.data));
-  // }
+  getCurrentCurrencyValue(): CurrentExchangeRate | null {
+    return this.currencyInfoSubject.value;
+  }
+
+  fetchHistoryExchangeCurrencyCards(from_symbol: string) {
+    this.http
+      .get<HistoryExchangeRate>(this.getEndpoint('history'), {
+        params: {
+          from_symbol,
+          to_symbol: 'BRL',
+        },
+        observe: 'body',
+      })
+      .subscribe((info) =>
+        this.currencyHistorySubject.next({
+          ...info,
+          data: info.data.slice(0, 30),
+        })
+      );
+  }
 }

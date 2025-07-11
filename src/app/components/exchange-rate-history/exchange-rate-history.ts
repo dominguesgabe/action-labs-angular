@@ -11,20 +11,41 @@ import { CurrencyCard } from '../../services/currency/currency-model';
 })
 export class ExchangeRateHistory {
   modalOpen = false;
-  currencyService: CurrencyService = inject(CurrencyService);
-  currencyCards: CurrencyCard[] = [];
+  currencyService = inject(CurrencyService);
+  currentExchangeRate$ = this.currencyService.currencyInfo$;
+  historyExchangeRate$ = this.currencyService.currencyHistory$;
 
-  constructor() {
-    // this.currencyService
-    //   .getDailyExchangeCurrencyCards({
-    //     from_symbol: 'USD',
-    //   })
-    //   .subscribe((cards) => {
-    //     this.currencyCards = cards;
-    //   });
+  setModalOpen(boolean: boolean) {
+    return (this.modalOpen = boolean);
   }
 
-  toggleModal() {
-    return (this.modalOpen = !this.modalOpen);
+  handleHistoryExchangeRate() {
+    const currentCurrency =
+      this.currencyService.getCurrentCurrencyValue()?.fromSymbol;
+
+    if (!currentCurrency) return;
+
+    this.currencyService.fetchHistoryExchangeCurrencyCards(currentCurrency);
+    this.setModalOpen(true);
+  }
+
+  ngOnInit() {
+    this.currentExchangeRate$.subscribe((currency) => {
+      if (currency) {
+        this.currencyService.clearCurrencyHistory();
+        this.setModalOpen(false);
+      }
+    });
+  }
+
+  getCloseDiff(index: number, data: CurrencyCard[]) {
+    if (index === 0) return 0;
+
+    const today = data[index];
+    const yesterday = data[index - 1];
+
+    if (!yesterday || yesterday.close === 0) return 0;
+
+    return ((today.close - yesterday.close) / yesterday.close) * 100;
   }
 }
