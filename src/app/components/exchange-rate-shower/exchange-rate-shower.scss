@@ -51,7 +51,28 @@
   background-color: #e7f8ff;
   font-size: 1.5rem;
   font-weight: 700;
-  margin: 0 auto;
-  text-align: center;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 70rem) {
+  .exchange-rate {
+    flex-direction: row;
+    justify-content: end;
+    gap: 2.5rem;
+  }
+
+  .timestamp-unity-wrapper {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .exchange-unity {
+    color: $neutral-dark;
+  }
+
+  .exchange-value {
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
 }

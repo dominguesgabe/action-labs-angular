@@ -39,7 +39,7 @@
 .currency-cards-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
   background-color: #f4f4f4;
   padding: 0.625rem;
   margin-bottom: 3rem;
@@ -102,5 +102,32 @@
       margin-left: 0.25rem;
       font-weight: bold;
     }
+  }
+}
+
+@media (min-width: 42rem) {
+  .currency-cards-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 65rem) {
+  .currency-cards-wrapper {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 85rem) {
+  .currency-cards-wrapper {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 100rem) {
+  .currency-cards-wrapper {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   }
 }
