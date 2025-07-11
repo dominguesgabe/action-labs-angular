@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CurrencyService } from '../../services/currency/currency-service';
+import { CurrencyCard } from '../../services/currency/currency-model';
 
 @Component({
   selector: 'app-exchange-rate-history',
@@ -9,35 +11,18 @@ import { Component } from '@angular/core';
 })
 export class ExchangeRateHistory {
   modalOpen = false;
-  currencyCards = [
-    {
-      id: 1,
-      open: '5.0013',
-      close: '5.0023',
-      high: '5.0045',
-      low: '4.4323',
-      closeDiff: '1.15',
-      date: '2022-03-12',
-    },
-    {
-      id: 2,
-      open: '5.0013',
-      close: '5.0023',
-      high: '5.0045',
-      low: '4.4323',
-      closeDiff: '1.15',
-      date: '2022-03-11',
-    },
-    {
-      id: 3,
-      open: '5.0013',
-      close: '5.0023',
-      high: '5.0045',
-      low: '4.4323',
-      closeDiff: '1.15',
-      date: '2022-03-10',
-    },
-  ];
+  currencyService: CurrencyService = inject(CurrencyService);
+  currencyCards: CurrencyCard[] = [];
+
+  constructor() {
+    // this.currencyService
+    //   .getDailyExchangeCurrencyCards({
+    //     from_symbol: 'USD',
+    //   })
+    //   .subscribe((cards) => {
+    //     this.currencyCards = cards;
+    //   });
+  }
 
   toggleModal() {
     return (this.modalOpen = !this.modalOpen);

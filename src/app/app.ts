@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { InputComponent } from './components/input-component/input-component';
-import { ExchangeRateShower } from './components/exchange-rate-shower/exchange-rate-shower';
-import { ExchangeRateHistory } from './components/exchange-rate-history/exchange-rate-history';
-import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import ptBr from '@angular/common/locales/pt';
+import { Component, inject, LOCALE_ID } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ExchangeRateHistory } from './components/exchange-rate-history/exchange-rate-history';
+import { ExchangeRateShower } from './components/exchange-rate-shower/exchange-rate-shower';
+import { InputComponent } from './components/input-component/input-component';
+import { CurrencyService } from './services/currency/currency-service';
 
 registerLocaleData(ptBr);
 
@@ -23,13 +23,16 @@ registerLocaleData(ptBr);
 })
 export class App {
   protected title = 'action-labs-app';
+  currencyService = inject(CurrencyService);
 
-  form = new FormGroup({
-    currency: new FormControl(''),
+  currencyForm = new FormGroup({
+    currencyCode: new FormControl(''),
   });
 
-  submit() {
-    console.log('entrou');
-    console.log(this.form.value);
+  onSubmit() {
+    const code = this.currencyForm.get('currencyCode')?.value;
+    if (!code) return;
+
+    this.currencyService.fetchCurrentExchangeCurrencyCards(code.toUpperCase());
   }
 }
